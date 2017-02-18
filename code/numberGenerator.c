@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 
-
 int main(int argc, char *argv[]) {
    FILE *fp;
    int r=0;
@@ -13,9 +12,11 @@ int main(int argc, char *argv[]) {
    	fprintf(stderr, "Cannot open file");
    } 
    else{ //this is where we write the random numbers
-   	for(int i=0;i<10;i++){
-   		r = rand()%10000;
-		fprintf(fp, "%d \n", r );
+      fprintf(fp, "%d", 10 );
+   	
+      for(int i=0;i<10;i++){
+   		r = rand()%100000;
+		fprintf(fp, "\n%d", r );
    	}    	
    }  
    
@@ -28,9 +29,11 @@ int main(int argc, char *argv[]) {
    	fprintf(stderr, "Cannot open file");
    }
    else{ //this is where we write the random numbers
-   	for(int i=0;i<100;i++){
+      fprintf(fp, "%d", 100 );
+   	
+      for(int i=0;i<100;i++){
    		r = rand()%100000;
-		fprintf(fp, "%d \n", r );
+		fprintf(fp, "\n%d", r );
    	}   
 	 }
    fclose(fp);
@@ -41,9 +44,11 @@ int main(int argc, char *argv[]) {
    	fprintf(stderr, "Cannot open file");
    }
 else{ //this is where we write the random numbers
-   	for(int i=0;i<1000;i++){
+      fprintf(fp, "%d", 1000 );
+   	
+      for(int i=0;i<1000;i++){
    		r = rand()%100000;
-		fprintf(fp, "%d \n", r );
+		fprintf(fp, "\n%d", r );
    	 }  
 	}    
    fclose(fp);
@@ -54,9 +59,12 @@ else{ //this is where we write the random numbers
    	fprintf(stderr, "Cannot open file");
    }
 else{ //this is where we write the random numbers
-   	for(int i=0;i<10000;i++){
+      fprintf(fp, "%d", 10000 );
+   	
+
+      for(int i=0;i<10000;i++){
    		r = rand()%100000;
-		fprintf(fp, "%d \n", r );
+		fprintf(fp, "\n%d", r );
    		}
    }      
    fclose(fp);
@@ -67,9 +75,11 @@ else{ //this is where we write the random numbers
    	fprintf(stderr, "Cannot open file");
    }
 else{ //this is where we write the random numbers
-   	for(int i=0;i<100000;i++){
+   	fprintf(fp, "%d",100000 );
+
+      for(int i=0;i<100000;i++){
    		r = rand()%100000;
-		fprintf(fp, "%d \n", r );
+		fprintf(fp, "\n%d", r );
    	}      
    }
    fclose(fp);
