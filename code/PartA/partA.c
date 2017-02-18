@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <time.h>
+int main(int argc, char *argv[])
+{	
+	clock_t begin = clock();
+	int size=0, i=0;
+	int sum = 0;
+	int min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
+	int max = 0; // it is set to zero in purpose because anything greater than that will update the value
+	//printf("max=%d\n", max);
+	//printf("min=%d\n",min );
+	int *numArray;
+	
+
+	//read the file from the command line
+	FILE* inputFile = fopen(argv[1],"r");
+	//read the first line that will be the size of the array
+	fscanf(inputFile, "%d", &size);
+	numArray = (int *)malloc(sizeof(int)*(size-1));
+	//dynamically allocate the array size
+	//int first = 1; //is 1 if we are reading the first number from the file
+	while(!feof(inputFile)){
+
+		fscanf(inputFile, "%d", &numArray[i]);
+		//printf("%d\n",numArray[i] );
+		i++;
+	}
+
+	fclose(inputFile);
+
+	//for loop for calculating the max, min and sum
+	for(int i=0;i<size;i++){
+		if(numArray[i]<min)
+			min = numArray[i];
+		else if (numArray[i]>max)
+			max = numArray[i];
+		sum += numArray[i];
+	}
+
+
+	printf("min=%d\n",min );
+	printf("max=%d\n",max );
+	printf("sum=%d\n",sum );
+
+	clock_t end = clock();
+	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+		printf("time spent=%f\n",time_spent);
+
+	return 0;
+}
