@@ -4,7 +4,9 @@
 #include <time.h>
 int main(int argc, char *argv[])
 {	
+	//clock begins here
 	clock_t begin = clock();
+	
 	int size=0, i=0;
 	int sum = 0;
 	int min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
@@ -18,13 +20,12 @@ int main(int argc, char *argv[])
 	FILE* inputFile = fopen(argv[1],"r");
 	//read the first line that will be the size of the array
 	fscanf(inputFile, "%d", &size);
-	numArray = (int *)malloc(sizeof(int)*(size-1));
 	//dynamically allocate the array size
-	//int first = 1; //is 1 if we are reading the first number from the file
-	while(!feof(inputFile)){
+	numArray = (int *)malloc(sizeof(int)*(size-1));
+	
+	while(!feof(inputFile)){ //fill up the array
 
 		fscanf(inputFile, "%d", &numArray[i]);
-		//printf("%d\n",numArray[i] );
 		i++;
 	}
 
@@ -44,6 +45,7 @@ int main(int argc, char *argv[])
 	printf("max=%d\n",max );
 	printf("sum=%d\n",sum );
 
+	//clock stops 
 	clock_t end = clock();
 	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
