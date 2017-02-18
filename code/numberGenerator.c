@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
    		r = rand()%10000;
 		fprintf(fp, "%d \n", r );
    	}    	
-   } 
+   }  
    
    fclose(fp);
 
