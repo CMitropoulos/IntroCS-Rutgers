@@ -39,11 +39,13 @@ all the chidren share the same array values afterwards
 	//FORKING FOR PROC1 - max calculation
 	pid1 = fork();
 
-	if(pid1==0){ //executed by the parent
-		printf("Hi I am process %d and my parent is %d\n", getpid(), getppid());
+	if(pid1>0){ //executed by the parent
+		printf("Hi I am the process0 %d and my parent is %d\n", getpid(), getppid());
 		wait();
-	}
+		}
 	else{ //executed by proc1 which is the child
+		printf("Hi I am process1 %d and my parent is %d\n", getpid(), getppid());
+
 		for(int i=0;i<size;i++){
 			if (numArray[i]>max)
 				max = numArray[i];
@@ -51,13 +53,15 @@ all the chidren share the same array values afterwards
 		//FORKING FOR PROC2 - min calculation
 		pid2 = fork();
 
-		if (pid2==0){//executed by the child - proc1
-			printf("Hi I am process %d and my parent is %d\n", getpid(), getppid());
-			printf("max=%d\n",max );
+		if (pid2>0){//executed by the child - proc1
 			wait();
+			printf("max=%d\n",max );
+
 			exit(0);
 		}
 		else{ //executed by proc2 which is the grandchild
+			printf("Hi I am process2 %d and my parent is %d\n", getpid(), getppid());
+			
 			for(int i=0;i<size;i++){
 				if(numArray[i]<min)
 					min = numArray[i];
@@ -66,17 +70,17 @@ all the chidren share the same array values afterwards
 			//FORKING FOR PROC3 - sum calculation
 			pid3 = fork();
 
-			if(pid3==0){//executed by the grandchild - proc2
-				printf("Hi I am process %d and my parent is %d\n", getpid(), getppid());
-				printf("min=%d\n",min );
+			if(pid3>0){//executed by the grandchild - proc2
+				
 				wait();
+				printf("min=%d\n",min );
 				exit(0);
 			}
 			else{ //executed by proc3 - GreatGrandChild
 				for(int i=0;i<size;i++){
 					sum += numArray[i];
 				}
-				printf("Hi I am process %d and my parent is %d\n", getpid(), getppid());
+				printf("Hi I am process3 %d and my parent is %d\n", getpid(), getppid());
 				printf("sum=%d\n",sum );
 				exit(0);
 
