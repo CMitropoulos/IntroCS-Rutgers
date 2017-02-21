@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <time.h>
+#include <unistd.h>
+
+
 int main(int argc, char *argv[])
 {	
 	//clock begins here
@@ -11,8 +14,6 @@ int main(int argc, char *argv[])
 	int sum = 0;
 	int min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
 	int max = 0; // it is set to zero in purpose because anything greater than that will update the value
-	//printf("max=%d\n", max);
-	//printf("min=%d\n",min );
 	int *numArray;
 	
 
@@ -40,6 +41,10 @@ int main(int argc, char *argv[])
 		sum += numArray[i];
 	}
 
+
+//print process number and parent process number
+	 printf("Hi I am process %d and my parent is %d\n", getpid(), getppid());
+   	
 
 	printf("min=%d\n",min );
 	printf("max=%d\n",max );
