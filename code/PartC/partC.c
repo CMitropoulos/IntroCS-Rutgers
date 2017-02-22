@@ -48,7 +48,7 @@ all the chidren share the same array values afterwards
 		if(pid2>0){//executed by parent - proc0
 			pid3 = fork();
 			if(pid3>0){
-				printf("These theparent after fork3\n");
+				//printf("These theparent after fork3\n");
 			}
 			else{ //executed by proc3
 				printf("Hi I am the process3 %d and my parent is %d\n", getpid(), getppid());
