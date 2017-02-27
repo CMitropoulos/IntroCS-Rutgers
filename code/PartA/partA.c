@@ -9,10 +9,10 @@ int main(int argc, char *argv[])
 {	
 	
 	int size=0, i=0;
-	float sum = 0;
-	float min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
-	float max = 0; // it is set to zero in purpose because anything greater than that will update the value
-	float *numArray;
+	double sum = 0;
+	double min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
+	double max = 0; // it is set to zero in purpose because anything greater than that will update the value
+	double *numArray;
 	
 
 	//read the file from the command line
@@ -20,11 +20,11 @@ int main(int argc, char *argv[])
 	//read the first line that will be the size of the array
 	fscanf(inputFile, "%d", &size);
 	//dynamically allocate the array size
-	numArray = (float *)malloc(sizeof(float)*(size-1));
+	numArray = (double *)malloc(sizeof(double)*(size-1));
 	
 	while(!feof(inputFile)){ //fill up the array
 
-		fscanf(inputFile, "%f", &numArray[i]);
+		fscanf(inputFile, "%lf", &numArray[i]);
 		i++;
 	}
 
@@ -44,12 +44,11 @@ int main(int argc, char *argv[])
 	 printf("Hi I am process %d and my parent is %d\n", getpid(), getppid());
    	
 
-	printf("min=%f\n",min );
-	printf("max=%f\n",max );
-	printf("sum=%f\n",sum );
+	printf("min=%lf\n",min );
+	printf("max=%lf\n",max );
+	printf("sum=%lf\n",sum );
 
-	//clock stops 
-	
+	free(numArray);
 
 	return 0;
 }
