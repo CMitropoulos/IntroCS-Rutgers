@@ -7,14 +7,12 @@
 
 int main(int argc, char *argv[])
 {	
-	//clock begins here
-	clock_t begin = clock();
 	
 	int size=0, i=0;
-	int sum = 0;
-	int min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
-	int max = 0; // it is set to zero in purpose because anything greater than that will update the value
-	int *numArray;
+	float sum = 0;
+	float min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
+	float max = 0; // it is set to zero in purpose because anything greater than that will update the value
+	float *numArray;
 	
 
 	//read the file from the command line
@@ -22,11 +20,11 @@ int main(int argc, char *argv[])
 	//read the first line that will be the size of the array
 	fscanf(inputFile, "%d", &size);
 	//dynamically allocate the array size
-	numArray = (int *)malloc(sizeof(int)*(size-1));
+	numArray = (float *)malloc(sizeof(float)*(size-1));
 	
 	while(!feof(inputFile)){ //fill up the array
 
-		fscanf(inputFile, "%d", &numArray[i]);
+		fscanf(inputFile, "%f", &numArray[i]);
 		i++;
 	}
 
@@ -46,15 +44,12 @@ int main(int argc, char *argv[])
 	 printf("Hi I am process %d and my parent is %d\n", getpid(), getppid());
    	
 
-	printf("min=%d\n",min );
-	printf("max=%d\n",max );
-	printf("sum=%d\n",sum );
+	printf("min=%f\n",min );
+	printf("max=%f\n",max );
+	printf("sum=%f\n",sum );
 
 	//clock stops 
-	clock_t end = clock();
-	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-
-		printf("time spent=%f\n",time_spent);
+	
 
 	return 0;
 }

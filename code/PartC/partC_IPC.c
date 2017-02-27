@@ -6,9 +6,10 @@
 #include <limits.h>
 
 //declare functions
-float* childFunction(int j,int step,int* array);
-float findMininArray(float* array, int size );
-float findMaxinArray(float* array, int size );
+double* childFunction(int j,int step,double* array);
+double findMininArray(double* array, int size );
+double findMaxinArray(double* array, int size );
+double findSumofArray(double* array, int size );
 
 
 int main(int argc, char *argv[])
@@ -20,11 +21,12 @@ int main(int argc, char *argv[])
 
         
         int     size=0;
-        int     *numArray;
-        float     *result,*maxArray,*minArray, sum=0.0, tempSum=0.0;
-        result = (float *)malloc(sizeof(int)*(3));
-        maxArray = (float *)malloc(sizeof(int)*(nbChildren));
-        minArray = (float *)malloc(sizeof(int)*(nbChildren));
+        double     *numArray;
+        double     *result,*maxArray,*minArray, sum=0.0,*tempSum;
+        result = (double *)malloc(sizeof(double)*(3));
+        maxArray = (double *)malloc(sizeof(double)*(nbChildren));
+        minArray = (double *)malloc(sizeof(double)*(nbChildren));
+        tempSum = (double *)malloc(sizeof(double)*(nbChildren));
 
 
 
@@ -35,10 +37,10 @@ int main(int argc, char *argv[])
     //read the first line that will be the size of the array
     fscanf(inputFile, "%d", &size);
     //dynamically allocate the array size
-    numArray = (int *)malloc(sizeof(int)*(size-1));
+    numArray = (double *)malloc(sizeof(double)*(size));
     int k=0;
     while(!feof(inputFile)){ //fill up the array
-        fscanf(inputFile, "%d", &numArray[k]);
+        fscanf(inputFile, "%lf", &numArray[k]);
         k++;
     }
 
@@ -72,15 +74,15 @@ int main(int argc, char *argv[])
                 /* Send "string" through the output side of pipe */
                     
 
-                    sprintf(string, "%f",result[0]);
+                    sprintf(string, "%lf",result[0]);
                     strcat(string,"\n");
                     write(fd[j][1], string,  (strlen(string)));
 
-                    sprintf(string, "%f",result[1]);
+                    sprintf(string, "%lf",result[1]);
                     strcat(string,"\n");
                     write(fd[j][1], string,  (strlen(string)));
                     
-                    sprintf(string, "%f",result[2]);
+                    sprintf(string, "%lf",result[2]);
                     strcat(string,"\n");
                     write(fd[j][1], string,  (strlen(string)));
                     
@@ -102,9 +104,6 @@ int main(int argc, char *argv[])
         close(fd[i][1]); //close the writing end of the pipe
         
         while(read(fd[i][0], readbuffer,1)>0 ){
-           //float number = atof(readbuffer);
-            
-            //printf("%.0f\n", number );
             fprintf(outputFile, "%s", readbuffer);  
         }
         close(fd[i][0]); //close the writing end of the pipe
@@ -120,29 +119,34 @@ int main(int argc, char *argv[])
     FILE* partial_results = fopen("partial_results.txt","r");
     int m=0;
     while(!feof(partial_results)){ //fill up the array
-        fscanf(partial_results, "%f", &maxArray[m]);
-        fscanf(partial_results, "%f", &minArray[m]);
-        fscanf(partial_results, "%f", &tempSum);
-        sum+=tempSum;
+        fscanf(partial_results, "%lf", &maxArray[m]);
+        fscanf(partial_results, "%lf", &minArray[m]);
+        fscanf(partial_results, "%lf", &tempSum[m]);
         m++;
     }
 
-    float finalMax=findMaxinArray(maxArray,nbChildren);
-    float finalMin=findMininArray(minArray, nbChildren);
-    float finalSum = sum;
+    double finalMax=findMaxinArray(maxArray,nbChildren);
+    double finalMin=findMininArray(minArray, nbChildren);
+    double finalSum = findSumofArray(tempSum, nbChildren);
 
-    printf("MAX=%f\n MIN=%f\n SUM=%f\n", finalMax, finalMin, finalSum);
+    printf("MAX=%lf\n MIN=%lf\n SUM=%lf\n", finalMax, finalMin, finalSum);
+
+
+free(result);
+free(maxArray);
+free(minArray);
+free(tempSum);
 
 
         return(0);
 }
 
-float* childFunction(int j,int step,int* array){
-        float min = (float)INT_MAX; // it is set to max in purpose so anything less than that will update the value
-        float max =0 ; // it is set to zero in purpose because anything greater than that will update the value
-        float *result;
-        float sum=0.0;
-        result = (float *)malloc(sizeof(float)*(3));
+double* childFunction(int j,int step,double* array){
+        double min = (double)INT_MAX; // it is set to max in purpose so anything less than that will update the value
+        double max =0 ; // it is set to zero in purpose because anything greater than that will update the value
+        double *result;
+        double sum=0.0;
+        result = (double *)malloc(sizeof(double)*(3));
 
         for(int k=j*step;k<(j+1)*step ; k++){
             if(array[k]>max){
@@ -152,7 +156,7 @@ float* childFunction(int j,int step,int* array){
                 min = array[k];
             }
             
-            sum+=(float)array[k];
+            sum+=(double)array[k];
         }
         result[0]=max;
         result[1]=min;
@@ -160,8 +164,8 @@ float* childFunction(int j,int step,int* array){
         return result;
     }
 
-float findMininArray(float* array, int size ){
-    float min = array[0];
+double findMininArray(double* array, int size ){
+    double min = array[0];
     for(int i=0;i<size;i++ ){
         if (array[i]<min)   
             min = array[i];
@@ -169,11 +173,19 @@ float findMininArray(float* array, int size ){
     return min;
 }
 
-float findMaxinArray(float* array, int size ){
-    float max = array[0];
+double findMaxinArray(double* array, int size ){
+    double max = array[0];
     for(int i=0;i<size;i++ ){
         if (array[i]>max)   
             max = array[i];
     }
     return max;
+}
+
+double findSumofArray(double* array, int size ){
+    double sum =0.0;
+    for(int i=0;i<size;i++ ){
+        sum = sum + array[i];
+    }
+    return sum;
 }

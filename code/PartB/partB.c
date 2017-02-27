@@ -10,10 +10,10 @@ int main(int argc, char *argv[])
 {	
 	
 	int size=0, i=0;
-	int sum = 0;
-	int min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
-	int max = 0; // it is set to zero in purpose because anything greater than that will update the value
-	int *numArray;
+	double sum = 0;
+	double min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
+	double max = 0; // it is set to zero in purpose because anything greater than that will update the value
+	double *numArray;
 	pid_t pid1=0, pid2=0, pid3=0; //these are the process id variables we will use in forking
 
 /*
@@ -26,11 +26,11 @@ all the chidren share the same array values afterwards
 	//read the first line that will be the size of the array
 	fscanf(inputFile, "%d", &size);
 	//dynamically allocate the array size
-	numArray = (int *)malloc(sizeof(int)*(size-1));
+	numArray = (double *)malloc(sizeof(double)*(size));
 	
 	while(!feof(inputFile)){ //fill up the array
 
-		fscanf(inputFile, "%d", &numArray[i]);
+		fscanf(inputFile, "%lf", &numArray[i]);
 		i++;
 	}
 
@@ -55,7 +55,7 @@ all the chidren share the same array values afterwards
 
 		if (pid2>0){//executed by the child - proc1
 			wait();
-			printf("max=%d\n",max );
+			printf("max=%lf\n",max );
 
 			exit(0);
 		}
@@ -73,7 +73,7 @@ all the chidren share the same array values afterwards
 			if(pid3>0){//executed by the grandchild - proc2
 				
 				wait();
-				printf("min=%d\n",min );
+				printf("min=%lf\n",min );
 				exit(0);
 			}
 			else{ //executed by proc3 - GreatGrandChild
@@ -81,7 +81,7 @@ all the chidren share the same array values afterwards
 					sum += numArray[i];
 				}
 				printf("Hi I am process3 %d and my parent is %d\n", getpid(), getppid());
-				printf("sum=%d\n",sum );
+				printf("sum=%lf\n",sum );
 				exit(0);
 
 			}
@@ -95,7 +95,7 @@ all the chidren share the same array values afterwards
 	
 
 
-
+	free(numArray);
 
 
 
