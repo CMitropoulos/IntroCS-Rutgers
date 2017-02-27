@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
       fprintf(fp, "%d", 10 );
    	
       for(int i=0;i<10;i++){
-   		r = rand()%100000;
+   		r = rand();
 		fprintf(fp, "\n%d", r );
    	}    	
    }  
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
       fprintf(fp, "%d", 100 );
    	
       for(int i=0;i<100;i++){
-   		r = rand()%100000;
+   		r = rand();
 		fprintf(fp, "\n%d", r );
    	}   
 	 }
@@ -47,7 +47,7 @@ else{ //this is where we write the random numbers
       fprintf(fp, "%d", 1000 );
    	
       for(int i=0;i<1000;i++){
-   		r = rand()%100000;
+   		r = rand();
 		fprintf(fp, "\n%d", r );
    	 }  
 	}    
@@ -63,7 +63,7 @@ else{ //this is where we write the random numbers
    	
 
       for(int i=0;i<10000;i++){
-   		r = rand()%100000;
+   		r = rand();
 		fprintf(fp, "\n%d", r );
    		}
    }      
@@ -78,14 +78,28 @@ else{ //this is where we write the random numbers
    	fprintf(fp, "%d",100000 );
 
       for(int i=0;i<100000;i++){
-   		r = rand()%100000;
+   		r = rand();
 		fprintf(fp, "\n%d", r );
    	}      
    }
    fclose(fp);
 
-
-
+//WRITE 1M numbers
+fp = fopen("input/1MNumbers.txt", "w");
+   srand(time(NULL));
+   if(fp == NULL){
+      fprintf(stderr, "Cannot open file");
+   } 
+   else{ //this is where we write the random numbers
+      fprintf(fp, "%d", 1000000 );
+      
+      for(int i=0;i<1000000;i++){
+         r = rand();
+      fprintf(fp, "\n%d", r );
+      }     
+   }  
+   
+   fclose(fp);
 
 
 
