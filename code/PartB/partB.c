@@ -4,12 +4,13 @@
 #include <time.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 
 int main(int argc, char *argv[])
 {	
 	
-	int size=0, i=0;
+	int size=0, i=0, status;
 	double sum = 0;
 	double min = INT_MAX; // it is set to max in purpose so anything less than that will update the value
 	double max = 0; // it is set to zero in purpose because anything greater than that will update the value
@@ -41,7 +42,7 @@ all the chidren share the same array values afterwards
 
 	if(pid1>0){ //executed by the parent
 		printf("Hi I am the process0 %d and my parent is %d\n", getpid(), getppid());
-		wait();
+		wait(&status);
 		}
 	else{ //executed by proc1 which is the child
 		printf("Hi I am process1 %d and my parent is %d\n", getpid(), getppid());
@@ -54,7 +55,7 @@ all the chidren share the same array values afterwards
 		pid2 = fork();
 
 		if (pid2>0){//executed by the child - proc1
-			wait();
+			wait(&status);
 			printf("max=%lf\n",max );
 
 			exit(0);
@@ -72,7 +73,7 @@ all the chidren share the same array values afterwards
 
 			if(pid3>0){//executed by the grandchild - proc2
 				
-				wait();
+				wait(&status);
 				printf("min=%lf\n",min );
 				exit(0);
 			}

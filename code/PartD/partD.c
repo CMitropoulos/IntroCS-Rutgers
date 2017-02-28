@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <sys/wait.h>
 
 //declare functions
 double* childFunction(int j,int step,double* array);
@@ -15,7 +16,7 @@ int main(int argc, char *argv[])
 {	
 	
  int     nbChildren = 5;   //Number of children - must be able to divide the array in same size segments
-        int     fd[nbChildren][2], nbytes=1;
+        int     fd[nbChildren][2], nbytes=1, status;
         pid_t   childpid;
         char    string[] = "Hello\n";
         char    readbuffer[100];
@@ -103,7 +104,7 @@ all the chidren share the same array values afterwards
 
     //first child reads from all its children after they are all done
     
-    wait();
+    wait(&status);
     outputFile = fopen("partial_results.txt", "w+");
    
     for(int i=0;i<nbChildren;i++){
@@ -145,13 +146,7 @@ free(minArray);
 
 	}
 
-
-
-
-
-
-
-wait();
+wait(&status);
 
 return 0;
 }

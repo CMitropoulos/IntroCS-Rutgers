@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <sys/wait.h>
 
 //declare functions
 double* childFunction(int j,int step,double* array);
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
         pid_t   childpid;
         char    string[] = "Hello\n";
         char    readbuffer[100];
+        int status;
 
         
         int     size=0;
@@ -97,7 +99,7 @@ int main(int argc, char *argv[])
 
     //parent reads from all children after they are all done
     
-    wait();
+    wait(&status);
     outputFile = fopen("partial_results.txt", "w+");
    
     for(int i=0;i<nbChildren;i++){
@@ -106,7 +108,7 @@ int main(int argc, char *argv[])
         while(read(fd[i][0], readbuffer,1)>0 ){
             fprintf(outputFile, "%s", readbuffer);  
         }
-        close(fd[i][0]); //close the writing end of the pipe
+        close(fd[i][0]); //close the reading end of the pipe
     
     }
         printf("\n");
