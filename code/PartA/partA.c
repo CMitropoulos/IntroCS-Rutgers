@@ -20,24 +20,22 @@ int main(int argc, char *argv[])
 	//read the first line that will be the size of the array
 	fscanf(inputFile, "%d", &size);
 	//dynamically allocate the array size
-	numArray = (double *)malloc(sizeof(double)*(size-1));
+	numArray = (double *)malloc(sizeof(double)*(size));
 	
 	while(!feof(inputFile)){ //fill up the array
 
 		fscanf(inputFile, "%lf", &numArray[i]);
-		i++;
-	}
-
-	fclose(inputFile);
-
-	//for loop for calculating the max, min and sum
-	for(int i=0;i<size;i++){
 		if(numArray[i]<min)
 			min = numArray[i];
 		else if (numArray[i]>max)
 			max = numArray[i];
 		sum += numArray[i];
+		i++;
+		
 	}
+
+	fclose(inputFile);
+
 
 
 //print process number and parent process number
