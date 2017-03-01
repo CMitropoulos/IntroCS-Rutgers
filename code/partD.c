@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
         result = (double *)malloc(sizeof(double)*(3));
         maxArray = (double *)malloc(sizeof(double)*(nbChildren));
         minArray = (double *)malloc(sizeof(double)*(nbChildren));
+         FILE* finaloutputFile = fopen("results_partD.txt","w+");
 /*
 Reading the file must be done in the parent process so that
 all the chidren share the same array values afterwards
@@ -53,7 +54,7 @@ all the chidren share the same array values afterwards
 
     int step = size/nbChildren;
 
-	printf("Hi I am parent process %d\n", getpid());
+	fprintf(finaloutputFile,"Hi I am parent process %d\n", getpid());
 
 	//Fork for the first child that will spawn all the other processes
 	pid1 = fork();
@@ -63,7 +64,7 @@ all the chidren share the same array values afterwards
 		exit(1);
 	}
 	else if(pid1==0){//child process -> this is where we create all the other children
-        printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
+       fprintf(finaloutputFile," Hi I am the child %d and my parent is %d\n", getpid(), getppid());
 
   		for(int j=0;j<nbChildren;j++){
         	pipe(fd[j]);
@@ -78,7 +79,7 @@ all the chidren share the same array values afterwards
         {
                 /* Child process closes up input side of pipe */
                 close(fd[j][0]);
-                printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
+                fprintf(finaloutputFile," Hi I am the child %d and my parent is %d\n", getpid(), getppid());
                 result = childFunction(j, step, numArray);
                 /* Send "string" through the output side of pipe */
                     
@@ -134,7 +135,7 @@ all the chidren share the same array values afterwards
     double finalMax=findMaxinArray(maxArray,nbChildren);
     double finalMin=findMininArray(minArray, nbChildren);
     double finalSum = sum;
-    printf("MAX=%lf\n MIN=%lf\n SUM=%lf\n", finalMax, finalMin, finalSum);
+    fprintf(finaloutputFile,"MAX=%lf\n MIN=%lf\n SUM=%lf\n", finalMax, finalMin, finalSum);
 
 
 free(result);

@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
 
 
-
+    FILE* finaloutputFile = fopen("results_partC.txt","w+");
         //read the file from the command line
     FILE* inputFile = fopen(argv[1],"r");
     //read the first line that will be the size of the array
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     int step = size/nbChildren;
 
 
-  printf("Hi I am the parent %d\n", getpid());
+  fprintf(finaloutputFile,"Hi I am the parent %d\n", getpid());
         
   for(int j=0;j<nbChildren;j++){
         pipe(fd[j]);
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
         {
                 /* Child process closes up input side of pipe */
                 close(fd[j][0]);
-                printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
+                fprintf(finaloutputFile," Hi I am the child %d and my parent is %d\n", getpid(), getppid());
                 result = childFunction(j, step, numArray);
                 /* Send "string" through the output side of pipe */
                     
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     double finalMin=findMininArray(minArray, nbChildren);
     double finalSum = findSumofArray(tempSum, nbChildren);
 
-    printf("MAX=%lf\n MIN=%lf\n SUM=%lf\n", finalMax, finalMin, finalSum);
+   fprintf(finaloutputFile,"MAX=%lf\n MIN=%lf\n SUM=%lf\n", finalMax, finalMin, finalSum);
 
 
 free(result);

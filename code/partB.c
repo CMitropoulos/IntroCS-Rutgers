@@ -28,6 +28,8 @@ all the chidren share the same array values afterwards
 	fscanf(inputFile, "%d", &size);
 	//dynamically allocate the array size
 	numArray = (double *)malloc(sizeof(double)*(size));
+	FILE* outputFile = fopen("results_partB.txt","w");
+
 	
 	while(!feof(inputFile)){ //fill up the array
 
@@ -41,11 +43,11 @@ all the chidren share the same array values afterwards
 	pid1 = fork();
 
 	if(pid1>0){ //executed by the parent
-		printf("Hi I am the process0 %d and my parent is %d\n", getpid(), getppid());
+		fprintf(outputFile,"Hi I am the process0 %d and my parent is %d\n", getpid(), getppid());
 		wait(&status);
 		}
 	else{ //executed by proc1 which is the child
-		printf("Hi I am process1 %d and my parent is %d\n", getpid(), getppid());
+		fprintf(outputFile,"Hi I am process1 %d and my parent is %d\n", getpid(), getppid());
 
 		for(int i=0;i<size;i++){
 			if (numArray[i]>max)
@@ -56,12 +58,12 @@ all the chidren share the same array values afterwards
 
 		if (pid2>0){//executed by the child - proc1
 			wait(&status);
-			printf("max=%lf\n",max );
+			fprintf(outputFile,"max=%lf\n",max );
 
 			exit(0);
 		}
 		else{ //executed by proc2 which is the grandchild
-			printf("Hi I am process2 %d and my parent is %d\n", getpid(), getppid());
+			fprintf(outputFile,"Hi I am process2 %d and my parent is %d\n", getpid(), getppid());
 			
 			for(int i=0;i<size;i++){
 				if(numArray[i]<min)
@@ -74,15 +76,15 @@ all the chidren share the same array values afterwards
 			if(pid3>0){//executed by the grandchild - proc2
 				
 				wait(&status);
-				printf("min=%lf\n",min );
+				fprintf(outputFile,"min=%lf\n",min );
 				exit(0);
 			}
 			else{ //executed by proc3 - GreatGrandChild
 				for(int i=0;i<size;i++){
 					sum += numArray[i];
 				}
-				printf("Hi I am process3 %d and my parent is %d\n", getpid(), getppid());
-				printf("sum=%lf\n",sum );
+				fprintf(outputFile,"Hi I am process3 %d and my parent is %d\n", getpid(), getppid());
+				fprintf(outputFile,"sum=%lf\n",sum );
 				exit(0);
 
 			}
@@ -90,12 +92,8 @@ all the chidren share the same array values afterwards
 
 	}
 
-
+	fclose(outputFile);
 	
-
-	
-
-
 	free(numArray);
 
 

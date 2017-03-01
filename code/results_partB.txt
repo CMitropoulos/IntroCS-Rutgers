@@ -1,0 +1,10 @@
+Hi I am process1 12776 and my parent is 12775
+Hi I am process2 12777 and my parent is 12776
+Hi I am process3 12778 and my parent is 12777
+sum=14582254300.000000
+Hi I am process1 12776 and my parent is 12775
+Hi I am process2 12777 and my parent is 12776
+min=768194446.000000
+Hi I am process1 12776 and my parent is 12775
+max=2065780692.000000
+Hi I am the process0 12775 and my parent is 12267

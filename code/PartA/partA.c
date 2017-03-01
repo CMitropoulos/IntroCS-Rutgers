@@ -36,15 +36,14 @@ int main(int argc, char *argv[])
 
 	fclose(inputFile);
 
-
-
-//print process number and parent process number
-	 printf("Hi I am process %d and my parent is %d\n", getpid(), getppid());
-   	
-
-	printf("min=%lf\n",min );
-	printf("max=%lf\n",max );
-	printf("sum=%lf\n",sum );
+//Write results in file
+FILE* outputFile = fopen("results_partA.txt","w+");
+//print process number and parent process number and results	
+	fprintf(outputFile,"Hi I am process %d and my parent is %d\n", getpid(), getppid());
+   	fprintf(outputFile,"min=%lf\n",min );
+	fprintf(outputFile,"max=%lf\n",max );
+	fprintf(outputFile,"sum=%lf\n",sum );
+	fclose(outputFile);
 
 	free(numArray);
 
