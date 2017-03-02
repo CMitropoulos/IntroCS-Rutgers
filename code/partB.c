@@ -101,7 +101,10 @@ all the chidren share the same array values afterwards
 
 
 
+wait(&status);
 
+char filename[] = "partial_results.txt";
+int ret = remove(filename);
 
 	
 

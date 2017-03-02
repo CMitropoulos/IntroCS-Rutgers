@@ -139,6 +139,10 @@ free(maxArray);
 free(minArray);
 free(tempSum);
 
+char filename[] = "partial_results.txt";
+int ret = remove(filename);
+
+   
 
         return(0);
 }

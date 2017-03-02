@@ -149,8 +149,18 @@ free(minArray);
 
 wait(&status);
 
+char filename[] = "partial_results.txt";
+int ret = remove(filename);
+
+
 return 0;
 }
+
+
+
+
+
+
 
 double* childFunction(int j,int step,double* array){
         double min = (double)INT_MAX; // it is set to max in purpose so anything less than that will update the value

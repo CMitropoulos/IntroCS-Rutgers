@@ -1,14 +1,14 @@
-Hi I am the parent 13921
- Hi I am the child 13923 and my parent is 13921
-Hi I am the parent 13921
- Hi I am the child 13924 and my parent is 13921
-Hi I am the parent 13921
- Hi I am the child 13926 and my parent is 13921
-Hi I am the parent 13921
- Hi I am the child 13925 and my parent is 13921
-Hi I am the parent 13921
- Hi I am the child 13927 and my parent is 13921
-Hi I am the parent 13921
-MAX=2147480477.000000
- MIN=309.000000
- SUM=1073680079529269.000000
+Hi I am the parent 30220
+ Hi I am the child 30225 and my parent is 30220
+Hi I am the parent 30220
+ Hi I am the child 30223 and my parent is 30220
+Hi I am the parent 30220
+ Hi I am the child 30226 and my parent is 30220
+Hi I am the parent 30220
+ Hi I am the child 30227 and my parent is 30220
+Hi I am the parent 30220
+ Hi I am the child 30224 and my parent is 30220
+Hi I am the parent 30220
+MAX=2147483520.000000
+ MIN=146.000000
+ SUM=10736933848488396.000000

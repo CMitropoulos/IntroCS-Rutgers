@@ -6,15 +6,15 @@ int main(int argc, char *argv[]) {
    FILE *fp;
    int r=0;
  //WRITE 10numbers
-   fp = fopen("input/10Numbers.txt", "w");
+   fp = fopen("input/10MNumbers.txt", "w");
    srand(time(NULL));
    if(fp == NULL){
    	fprintf(stderr, "Cannot open file");
    } 
    else{ //this is where we write the random numbers
-      fprintf(fp, "%d", 10 );
+      fprintf(fp, "%d", 10000000 );
    	
-      for(int i=0;i<10;i++){
+      for(int i=0;i<10000000;i++){
    		r = rand();
 		fprintf(fp, "\n%d", r );
    	}    	
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
    
    fclose(fp);
 
-
+/*
  //WRITE 100numbers
    fp = fopen("input/100Numbers.txt", "w");
    if(fp == NULL){
@@ -101,7 +101,7 @@ fp = fopen("input/1MNumbers.txt", "w");
    
    fclose(fp);
 
-
+*/
 
 
 

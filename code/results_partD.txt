@@ -1,21 +1,21 @@
-Hi I am parent process 13425
- Hi I am the child 13426 and my parent is 13425
- Hi I am the child 13427 and my parent is 13426
-Hi I am parent process 13425
- Hi I am the child 13426 and my parent is 13425
- Hi I am the child 13430 and my parent is 13426
-Hi I am parent process 13425
- Hi I am the child 13426 and my parent is 13425
- Hi I am the child 13428 and my parent is 13426
-Hi I am parent process 13425
- Hi I am the child 13426 and my parent is 13425
- Hi I am the child 13429 and my parent is 13426
-Hi I am parent process 13425
- Hi I am the child 13426 and my parent is 13425
- Hi I am the child 13431 and my parent is 13426
-Hi I am parent process 13425
- Hi I am the child 13426 and my parent is 13425
-MAX=2147480477.000000
- MIN=309.000000
- SUM=1073680079529269.000000
-Hi I am parent process 13425
+Hi I am parent process 30228
+ Hi I am the child 30229 and my parent is 30228
+ Hi I am the child 30234 and my parent is 30229
+Hi I am parent process 30228
+ Hi I am the child 30229 and my parent is 30228
+ Hi I am the child 30232 and my parent is 30229
+Hi I am parent process 30228
+ Hi I am the child 30229 and my parent is 30228
+ Hi I am the child 30233 and my parent is 30229
+Hi I am parent process 30228
+ Hi I am the child 30229 and my parent is 30228
+ Hi I am the child 30230 and my parent is 30229
+Hi I am parent process 30228
+ Hi I am the child 30229 and my parent is 30228
+ Hi I am the child 30231 and my parent is 30229
+Hi I am parent process 30228
+ Hi I am the child 30229 and my parent is 30228
+MAX=2147483520.000000
+ MIN=146.000000
+ SUM=10736933848487384.000000
+Hi I am parent process 30228
