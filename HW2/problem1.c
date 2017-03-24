@@ -5,6 +5,7 @@
 
 struct thread_data{
 	int thread_id;
+	int size;
 	int *array;
 };
 
@@ -13,10 +14,13 @@ struct thread_data thread_data_array[NUM_THREADS];
 
 void *FindPrime(void *threadData){
 	struct thread_data *my_data;
+	my_data =(struct thread_data *)threadData;
+	
 	long tid;
 
-
-	printf("Array element%d\n", my_data->array[0] );
+	for(int i=0;i<my_data->size;i++){
+		printf("Array %d\n", my_data->array[i] );
+	}
 	printf("Thread %ld done.\n",tid);
     pthread_exit((void*) threadData);
 }
@@ -30,12 +34,7 @@ int main(int argc, char const *argv[])
 	scanf("%d", &n);
 
 	int *primeArray;
-	//Allocate memory for the primeArray and initialize
-	//all values to 1
-	primeArray =(int*)malloc(sizeof(int)*(n+1));
-	for(int i=0;i++;i<n+1)
-		primeArray[i]=1;
-
+	
 	void *status;
 	pthread_t threads[NUM_THREADS];
 	pthread_attr_t attr;
@@ -43,11 +42,20 @@ int main(int argc, char const *argv[])
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 	
-	
+
+//Allocate memory for the primeArray and initialize
+	//all values to 1
+	primeArray =(int*)malloc(sizeof(int)*(n+1));
+	for(int i=0;i<n+1;i++){
+		primeArray[i]=1;
+
+	}
 
 	//Create thread to find all the prime numbers
 	//set the arguments we will pass to the thread
 	thread_data_array[0].thread_id = 0;
+	thread_data_array[0].size = n+1;
+	thread_data_array[0].array =(int*)malloc(sizeof(int)*(n+1));
 	thread_data_array[0].array = primeArray;
 
 	int rc = pthread_create(&threads[0], &attr, FindPrime, (void*) &thread_data_array[0]);
