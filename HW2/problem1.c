@@ -4,6 +4,9 @@
 #include <math.h>
 #define NUM_THREADS  2
 
+/* TO COMPILE USE command 
+   gcc -pthread problem1.c -o problem1 -lm
+ */
 struct thread_data{
 	int thread_id;
 	int size;
