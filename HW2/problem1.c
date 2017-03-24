@@ -52,7 +52,7 @@ void *FindSubset(void *threadData){
 	//find the subset
 	printf("the numbers in the subset are \n");
 	for(int i=2;i<my_data->size;i++){
-		if(my_data->array[i]==1 && my_data->array[reverse(i)]==1 && i!=reverse(i))
+		if(reverse(i)<my_data->size && my_data->array[i]==1 && my_data->array[reverse(i)]==1 && i!=reverse(i))
 			printf("%d \n", i );
 
 
