@@ -18,9 +18,7 @@ static void signalHandler(int sig, siginfo_t *siginfo, void *context){
     char pid_string[8];
     switch(sig){
       case SIGUSR1:
-        
-    
-        printf ("Sending PID: %ld, UID: %ld\n",(long)siginfo->si_pid, (long)siginfo->si_uid);
+        printf ("(SIGUSR1)Sending PID: %ld\n",(long)siginfo->si_pid);
         //start function to execute the merging of the results
         int p_id = (int)siginfo->si_pid;
         double temp_min=0, temp_max=0;
@@ -40,6 +38,11 @@ static void signalHandler(int sig, siginfo_t *siginfo, void *context){
             max=temp_max;
 
         break;
+      case SIGALRM: //a process is delayed so we kill it
+        printf ("(SIGALRM)Sending PID: %ld\n",(long)siginfo->si_pid);
+        kill(SIGKILL,siginfo->si_pid );
+
+        break;
 
     }
 }
@@ -47,7 +50,7 @@ static void signalHandler(int sig, siginfo_t *siginfo, void *context){
 int main(int argc, char *argv[])
 {	
 	
- int     nbChildren = 2;   //Number of children - must be able to divide the array in same size segments
+ int     nbChildren = 4;   //Number of children - must be able to divide the array in same size segments
         int     status;
         pid_t   childpid;
         
@@ -109,8 +112,9 @@ all the chidren share the same array values afterwards
 
         	if(childpid == 0) //grandchildren -> all the magic happens here
         {
-                //TODO: add timer so that if some process takes more than 3 seconds it is terminated
-                
+                //Alarm so that if some process takes more than 3 seconds it is terminated
+                alarm(3); //after 3 seconds
+                //sleep(10); //sleep to test if the alarm works after some delibarate delay
                 printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
                 result = childFunction(j, step, numArray);
                 //write result in a file with the process id as a name
@@ -142,8 +146,13 @@ all the chidren share the same array values afterwards
                 perror ("sigusr1");
                 return 1;
             }
-                sleep(3);
-                wait(&status);
+              if (sigaction(SIGALRM, &act, NULL) < 0) {
+                perror ("sigalarm");
+                return 1;
+            }
+
+                sleep(5);
+                
 
 
             
