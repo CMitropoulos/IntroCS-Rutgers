@@ -11,30 +11,43 @@ double* childFunction(int j,int step,double* array);
 double findMininArray(double* array, int size );
 double findMaxinArray(double* array, int size );
 
+//GLOBAL VARIABLES
 double max = 0,min=999999999999;
 
 static void signalHandler(int sig, siginfo_t *siginfo, void *context){
     char pid_string[8];
+    switch(sig){
+      case SIGUSR1:
+        
     
-    printf ("Sending PID: %ld, UID: %ld\n",(long)siginfo->si_pid, (long)siginfo->si_uid);
-    //start function to execute the merging of the results
-    int p_id = (int)siginfo->si_pid;
-    double temp_min=0, temp_max=0;
-    sprintf(pid_string, "%d",p_id);
+        printf ("Sending PID: %ld, UID: %ld\n",(long)siginfo->si_pid, (long)siginfo->si_uid);
+        //start function to execute the merging of the results
+        int p_id = (int)siginfo->si_pid;
+        double temp_min=0, temp_max=0;
+        sprintf(pid_string, "%d",p_id);
 
-    //read from permanent files     
-    FILE* inputFile = fopen(pid_string,"r");
-    fscanf(inputFile, "%lf", &temp_max);
-    fscanf(inputFile,"%lf", &temp_min);
-    fclose(inputFile);
-    printf("Max=%lf\n MIN=%lf\n", temp_max,temp_min);
+        //read from permanent files     
+        FILE* inputFile = fopen(pid_string,"r");
+        fscanf(inputFile, "%lf", &temp_max);
+        fscanf(inputFile,"%lf", &temp_min);
+        fclose(inputFile);
+        int ret= remove(pid_string);
+        //printf("Max=%lf\n MIN=%lf\n", temp_max,temp_min);
 
+        if(temp_min<min)
+            min = temp_min;
+        if(temp_max>max)
+            max=temp_max;
+
+        break;
+
+    }
 }
 
 int main(int argc, char *argv[])
 {	
 	
- int     nbChildren = 5;   //Number of children - must be able to divide the array in same size segments
+ int     nbChildren = 2;   //Number of children - must be able to divide the array in same size segments
         int     status;
         pid_t   childpid;
         
@@ -129,9 +142,11 @@ all the chidren share the same array values afterwards
                 perror ("sigusr1");
                 return 1;
             }
-           
-                sleep (10);
+                sleep(3);
+                wait(&status);
 
+
+            
 
 
         }
@@ -142,7 +157,7 @@ all the chidren share the same array values afterwards
       
     
 
-
+printf("Max=%lf\n MIN=%lf\n SUM=%lf\n", max,min,sum);
 free(result);
 free(maxArray);
 free(minArray);
