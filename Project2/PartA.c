@@ -11,6 +11,25 @@ double* childFunction(int j,int step,double* array);
 double findMininArray(double* array, int size );
 double findMaxinArray(double* array, int size );
 
+double max = 0,min=999999999999;
+
+static void signalHandler(int sig, siginfo_t *siginfo, void *context){
+    char pid_string[8];
+    
+    printf ("Sending PID: %ld, UID: %ld\n",(long)siginfo->si_pid, (long)siginfo->si_uid);
+    //start function to execute the merging of the results
+    int p_id = (int)siginfo->si_pid;
+    double temp_min=0, temp_max=0;
+    sprintf(pid_string, "%d",p_id);
+
+    //read from permanent files     
+    FILE* inputFile = fopen(pid_string,"r");
+    fscanf(inputFile, "%lf", &temp_max);
+    fscanf(inputFile,"%lf", &temp_min);
+    fclose(inputFile);
+    printf("Max=%lf\n MIN=%lf\n", temp_max,temp_min);
+
+}
 
 int main(int argc, char *argv[])
 {	
@@ -64,11 +83,12 @@ all the chidren share the same array values afterwards
 	else if(pid1==0){//child process -> this is where we create all the other children
         printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
 
-        //TODO: register all the signals that wait for the children to be ready to give results
+       
   		for(int j=0;j<nbChildren;j++){
         	
 
-        	if((childpid = fork()) == -1)
+
+        	if((childpid = fork()) == -1) //this is where the grandchildren are forked
         {
                 perror("fork");
                 exit(1);
@@ -91,13 +111,29 @@ all the chidren share the same array values afterwards
                 fprintf(p_results_file, "%lf\n", result[0] );
                 fprintf(p_results_file, "%lf\n", result[1] );
 
+                fclose(p_results_file);
                 //TODO: send signal that the results are ready to read
-                    
+                    kill(getppid(),SIGUSR1);
                     exit(0);
         }
         else //parent
         {
-               
+               //TODO: register all the signals that wait for the children to be ready to give results
+            struct sigaction act;
+            memset (&act, '\0', sizeof(act));
+            /* Use the sa_sigaction field because the handles has two additional parameters */
+            act.sa_sigaction = &signalHandler;
+            /* The SA_SIGINFO flag tells sigaction() to use the sa_sigaction field, not sa_handler. */
+            act.sa_flags = SA_SIGINFO;
+            if (sigaction(SIGUSR1, &act, NULL) < 0) {
+                perror ("sigusr1");
+                return 1;
+            }
+           
+                sleep (10);
+
+
+
         }
     }
 
@@ -158,4 +194,3 @@ double findMaxinArray(double* array, int size ){
     }
     return max;
 }
-
