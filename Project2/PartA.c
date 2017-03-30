@@ -64,6 +64,7 @@ all the chidren share the same array values afterwards
 	else if(pid1==0){//child process -> this is where we create all the other children
         printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
 
+        //TODO: register all the signals that wait for the children to be ready to give results
   		for(int j=0;j<nbChildren;j++){
         	
 
@@ -75,7 +76,7 @@ all the chidren share the same array values afterwards
 
         	if(childpid == 0) //grandchildren -> all the magic happens here
         {
-                /* Child process closes up input side of pipe */
+                //TODO: add timer so that if some process takes more than 3 seconds it is terminated
                 
                 printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
                 result = childFunction(j, step, numArray);
@@ -90,6 +91,7 @@ all the chidren share the same array values afterwards
                 fprintf(p_results_file, "%lf\n", result[0] );
                 fprintf(p_results_file, "%lf\n", result[1] );
 
+                //TODO: send signal that the results are ready to read
                     
                     exit(0);
         }
