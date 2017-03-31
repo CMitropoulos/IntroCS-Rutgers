@@ -88,6 +88,11 @@ all the chidren share the same array values afterwards
     int step = size/nbChildren;
 
 	printf("Hi I am parent process %d\n", getpid());
+    //REGISTER THE HANDLER FOR THE USER ACTIONS
+
+
+
+    
 
 	//Fork for the first child that will spawn all the other processes
 	pid1 = fork();
