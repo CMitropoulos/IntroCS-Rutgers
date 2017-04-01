@@ -5,6 +5,7 @@
 #include <string.h>
 #include <limits.h>
 #include <sys/wait.h>
+#include <sys/prctl.h>
 
 //declare functions
 double* childFunction(int j,int step,double* array);
@@ -13,6 +14,9 @@ double findMaxinArray(double* array, int size );
 
 //GLOBAL VARIABLES
 double max = 0,min=999999999999;
+int     nbChildren = 4;   //Number of children - must be able to divide the array in same size segments
+
+int processIds[6];
 
 static void signalHandler(int sig, siginfo_t *siginfo, void *context){
     char pid_string[8];
@@ -40,17 +44,28 @@ static void signalHandler(int sig, siginfo_t *siginfo, void *context){
         break;
       case SIGALRM: //a process is delayed so we kill it
         printf ("(SIGALRM)Sending PID: %ld\n",(long)siginfo->si_pid);
-        kill(SIGKILL,siginfo->si_pid );
+        kill(siginfo->si_pid, SIGKILL );
 
+        break;
+      case SIGINT:
+        printf ("(SIGINT - Ctr+C)Sending PID: %ld\n",(long)siginfo->si_pid);
+        for(int i=0;i<nbChildren;i++){
+            kill(processIds[i],SIGKILL);
+        }
+        break;
+      case SIGTSTP:
+         printf ("(SIGSTP - Ctr+Z)Sending PID: %ld\n",(long)siginfo->si_pid);
+        for(int i=0;i<nbChildren;i++){
+            kill(processIds[i],SIGKILL);
+        }
         break;
 
     }
 }
 
 int main(int argc, char *argv[])
-{	
-	
- int     nbChildren = 4;   //Number of children - must be able to divide the array in same size segments
+{   
+    
         int     status;
         pid_t   childpid;
         
@@ -62,64 +77,90 @@ int main(int argc, char *argv[])
         result = (double *)malloc(sizeof(double)*(3));
         maxArray = (double *)malloc(sizeof(double)*(nbChildren));
         minArray = (double *)malloc(sizeof(double)*(nbChildren));
+        processIds[0]=getpid();
+
+
+  //REGISTER THE HANDLER FOR THE USER ACTIONS
+    struct sigaction user_act;
+            memset (&user_act, '\0', sizeof(user_act));
+            /* Use the sa_sigaction field because the handles has two additional parameters */
+            user_act.sa_sigaction = &signalHandler;
+            /* The SA_SIGINFO flag tells sigaction() to use the sa_sigaction field, not sa_handler. */
+            user_act.sa_flags = SA_SIGINFO;
+            if (sigaction(SIGINT, &user_act, NULL) < 0) {
+                perror ("sigint");
+                return 1;
+            }
+            if (sigaction(SIGTSTP, &user_act, NULL) < 0) {
+                perror ("sigint");
+                return 1;
+            }
 /*
 Reading the file must be done in the parent process so that
 all the chidren share the same array values afterwards
 */
 
-	//read the file from the command line
-	FILE* inputFile = fopen(argv[1],"r");
-	//read the first line that will be the size of the array
-	fscanf(inputFile, "%d", &size);
-	//dynamically allocate the array size
-	numArray = (double *)malloc(sizeof(double)*(size));
-	int k=0;
-	while(!feof(inputFile)){ //fill up the array
+    //read the file from the command line
+    FILE* inputFile = fopen(argv[1],"r");
+    //read the first line that will be the size of the array
+    fscanf(inputFile, "%d", &size);
+    //dynamically allocate the array size
+    numArray = (double *)malloc(sizeof(double)*(size));
+    int k=0;
+    while(!feof(inputFile)){ //fill up the array
 
-		fscanf(inputFile, "%lf", &numArray[k]);
-		sum += numArray[k];
-		k++;
-	}
+        fscanf(inputFile, "%lf", &numArray[k]);
+        sum += numArray[k];
+        k++;
+    }
 
-	fclose(inputFile);
-	    //output file
+    fclose(inputFile);
+        //output file
     
 
     int step = size/nbChildren;
-
-	printf("Hi I am parent process %d\n", getpid());
-    //REGISTER THE HANDLER FOR THE USER ACTIONS
-
-
+    printf("Hi I am parent process %d\n", getpid());
+  
+            
 
     
 
-	//Fork for the first child that will spawn all the other processes
-	pid1 = fork();
+    //Fork for the first child that will spawn all the other processes
+    pid1 = fork();
 
-	if(pid1==-1){
-		perror("fork");
-		exit(1);
-	}
-	else if(pid1==0){//child process -> this is where we create all the other children
+    if(pid1==-1){
+        perror("fork");
+        exit(1);
+    }
+    else if(pid1==0){//child process -> this is where we create all the other children
         printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
-
+        processIds[1]=getpid();
        
-  		for(int j=0;j<nbChildren;j++){
-        	
+        for(int j=0;j<nbChildren;j++){
+            
 
 
-        	if((childpid = fork()) == -1) //this is where the grandchildren are forked
+            if((childpid = fork()) == -1) //this is where the grandchildren are forked
         {
                 perror("fork");
                 exit(1);
         }
 
-        	if(childpid == 0) //grandchildren -> all the magic happens here
-        {
+            if(childpid == 0) //grandchildren -> all the magic happens here
+        {       
+                switch(j){
+                    case 0:
+                        processIds[2]=getpid();
+                    case 1:
+                        processIds[3]=getpid();
+                    case 2:
+                        processIds[4]=getpid();
+                    case 3:
+                        processIds[5]=getpid();
+                }
                 //Alarm so that if some process takes more than 3 seconds it is terminated
                 alarm(3); //after 3 seconds
-                //sleep(10); //sleep to test if the alarm works after some delibarate delay
+                
                 printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
                 result = childFunction(j, step, numArray);
                 //write result in a file with the process id as a name
@@ -175,11 +216,11 @@ printf("Max=%lf\n MIN=%lf\n SUM=%lf\n", max,min,sum);
 free(result);
 free(maxArray);
 free(minArray);
-	
-	}
-	else{//parent process - nothing really done here
+    
+    }
+    else{//parent process - nothing really done here
 
-	}
+    }
 
 wait(&status);
 
