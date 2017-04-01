@@ -1,2 +1,2 @@
-PartA: PartA.c
-		 gcc -o PartA PartA.c
+partA: partA.c
+		 gcc -o partA partA.c
