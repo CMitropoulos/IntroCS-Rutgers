@@ -43,8 +43,8 @@ static void signalHandler(int sig, siginfo_t *siginfo, void *context){
 
         break;
       case SIGALRM: //a process is delayed so we kill it
-        printf ("(SIGALRM)Sending PID: %ld\n",(long)siginfo->si_pid);
-        kill(siginfo->si_pid, SIGKILL );
+        printf ("(SIGALRM)Sending PID: %ld THIS DIES\n",(long)getpid());
+        kill(getpid(), SIGKILL);
 
         break;
       case SIGINT:
@@ -124,7 +124,7 @@ all the chidren share the same array values afterwards
             
 
     
-
+    signal(SIGALRM, SIG_IGN);
     //Fork for the first child that will spawn all the other processes
     pid1 = fork();
 
@@ -160,8 +160,9 @@ all the chidren share the same array values afterwards
                 }
                 //Alarm so that if some process takes more than 3 seconds it is terminated
                 alarm(3); //after 3 seconds
-                
-                printf(" Hi I am the child %d and my parent is %d\n", getpid(), getppid());
+                if(j==3)
+                    sleep(10);
+                printf(" Hi I am the grandchild %d and my parent is %d\n", getpid(), getppid());
                 result = childFunction(j, step, numArray);
                 //write result in a file with the process id as a name
                 FILE *p_results_file;
@@ -176,12 +177,14 @@ all the chidren share the same array values afterwards
 
                 fclose(p_results_file);
                 //TODO: send signal that the results are ready to read
-                    kill(getppid(),SIGUSR1);
-                    exit(0);
+                kill(getppid(),SIGUSR1);
+                exit(0);
         }
         else //parent
         {
-               //TODO: register all the signals that wait for the children to be ready to give results
+            
+            printf("THE CHILD AFTER THE FORKING\n");
+           // signal(SIGALRM, SIG_IGN);
             struct sigaction act;
             memset (&act, '\0', sizeof(act));
             /* Use the sa_sigaction field because the handles has two additional parameters */
